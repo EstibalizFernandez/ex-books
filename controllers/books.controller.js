@@ -1,3 +1,5 @@
+const createError = require('http-errors');
+const mongoose = require('mongoose');
 const Book = require('../models/book.model');
 
 module.exports.list = (req, res, next) => {
@@ -10,6 +12,28 @@ module.exports.list = (req, res, next) => {
         .catch(error => {
             next(error);
         });
+}
+
+module.exports.get = (req, res, next) => {
+    const id = req.params.id;
+    Book.findById(id)
+        .then(book => {
+            if (book) {
+                res.render('books/detail', {
+                    book
+                });
+            } else {
+                next(createError(404, `Book with id ${id} not found`));
+            }
+        })
+        .catch(error => {
+            if (error instanceof mongoose.Error.CastError) {
+                next(createError(404, `Book with id ${id} not found`));
+            } else {
+                next(error);
+            }
+        });
+    
 }
 
 module.exports.create = (req, res, next) => {
