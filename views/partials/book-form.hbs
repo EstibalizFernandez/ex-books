@@ -1,0 +1,57 @@
+<form action="{{#if book }}/books/{{book._id}}/update{{else}}/books/create{{/if}}" method="post" class="col-4">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">
+                <i class="fas fa-tag"></i>
+            </span>
+        </div>
+        <input type="text" class="form-control {{#if errors.title }}is-invalid{{/if}}" name="title" placeholder="Title" value="{{ book.title }}"/>
+        {{#if errors.title }}
+            <div class="invalid-feedback">
+                {{ errors.title }}
+            </div>
+        {{/if}}
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">
+                <i class="fas fa-user"></i>
+            </span>
+        </div>
+        <input type="text" class="form-control {{#if errors.author }}is-invalid{{/if}}" name="author" placeholder="Author" value="{{ book.author }}">
+         {{#if errors.author }}
+            <div class="invalid-feedback">
+                {{ errors.author }}
+            </div>
+        {{/if}}
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+                <i class="fas fa-edit"></i>
+            </div>
+        </div>
+        <textarea name="description" class="form-control {{#if errors.description }}is-invalid{{/if}}">{{ book.description }}</textarea>
+        {{#if errors.description }}
+            <div class="invalid-feedback">
+                {{ errors.description }}
+            </div>
+        {{/if}}
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+                <i class="fas fa-star"></i>
+            </div>
+        </div>
+        <input type="number" class="form-control {{#if errors.rating }}is-invalid{{/if}}" name="rating" min="1" max="10" value="{{ book.rating }}">
+        {{#if errors.rating }}
+            <div class="invalid-feedback">
+                {{ errors.rating }}
+            </div>
+        {{/if}}
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-block">{{#if book }}Edit{{else}}Add{{/if}} Book</button>
+    </div>
+</form>

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "DEBUG=ex-books:* nodemon ./bin/www",
+    "dev": "DEBUG=ex-books:* nodemon -e hbs,js ./bin/www",
     "seed": "node ./bin/seeds"
   },
   "dependencies": {
