@@ -51,7 +51,14 @@ module.exports.doCreate = (req, res, next) => {
             res.redirect('/books');
         })
         .catch(error => {
-            next(error);
+            if (error instanceof mongoose.Error.ValidationError) {
+                res.render('books/create', {
+                    book: req.body,
+                    errors: error.errors
+                });
+            } else {
+                next(error);
+            }
         });
 }
 

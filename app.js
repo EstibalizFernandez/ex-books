@@ -9,6 +9,7 @@ require('./configs/db.config');
 require('./configs/hbs.config');
 
 const booksRouter = require('./routes/books.routes');
+const authorsRouter = require('./routes/authors.routes');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(sassMiddleware({
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/books', booksRouter);
+app.use('/authors', authorsRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
