@@ -14,6 +14,27 @@ module.exports.list = (req, res, next) => {
         });
 }
 
+module.exports.get = (req, res, next) => {
+    const id = req.params.id;
+    Author.findById(id)
+        .then(author => {
+            if (author) {
+                res.render('authors/detail', {
+                    author
+                });
+            } else {
+                next(createError(404, `Author with id ${id} not found`));
+            }
+        })
+        .catch(error => {
+            if (error instanceof mongoose.Error.CastError) {
+                next(createError(404, `Author with id ${id} not found`));
+            } else {
+                next(error);
+            }
+        });
+}
+
 module.exports.create = (req, res, next) => {
     res.render('authors/create');
 }
