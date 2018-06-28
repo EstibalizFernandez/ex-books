@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const mongoose = require('mongoose');
 const Book = require('../models/book.model');
+const Author = require('../models/author.model');
 
 module.exports.list = (req, res, next) => {
     Book.find()
@@ -40,22 +41,35 @@ module.exports.create = (req, res, next) => {
 }
 
 module.exports.doCreate = (req, res, next) => {
-    const book = new Book({
-        title: req.body.title,
-        author: req.body.author,
-        description: req.body.description,
-        rating: req.body.rating
-    });
-    book.save()
-        .then(() => {
-            res.redirect('/books');
+
+    function renderWithErrors(errors) {
+        res.render('books/create', {
+            book: req.body,
+            errors: errors
+        });
+    }
+
+    Author.findOne({ name: req.body.author })
+        .then(author => {
+            if (author) {
+                console.log(author);
+                const book = new Book({
+                    title: req.body.title,
+                    author: author._id,
+                    description: req.body.description,
+                    rating: req.body.rating
+                });
+                return book.save()
+                    .then(() => {
+                        res.redirect('/books');
+                    });
+            } else {
+                renderWithErrors({ author: 'Invalid author name' })
+            }
         })
         .catch(error => {
             if (error instanceof mongoose.Error.ValidationError) {
-                res.render('books/create', {
-                    book: req.body,
-                    errors: error.errors
-                });
+                renderWithErrors(error.errors);
             } else {
                 next(error);
             }
