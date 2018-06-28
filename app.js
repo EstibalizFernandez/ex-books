@@ -9,6 +9,7 @@ require('./configs/db.config');
 require('./configs/hbs.config');
 
 const booksRouter = require('./routes/books.routes');
+const authorsRouter = require('./routes/authors.routes');
 
 const app = express();
 
@@ -28,15 +29,21 @@ app.use(sassMiddleware({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+  res.locals.path = req.path;
+  next();
+});
+
 app.use('/books', booksRouter);
+app.use('/authors', authorsRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
