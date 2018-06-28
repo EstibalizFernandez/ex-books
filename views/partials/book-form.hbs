@@ -18,7 +18,7 @@
                 <i class="fas fa-user"></i>
             </span>
         </div>
-        <input type="text" class="form-control {{#if errors.author }}is-invalid{{/if}}" name="author" placeholder="Author" value="{{ book.author }}">
+        <input type="text" class="form-control {{#if errors.author }}is-invalid{{/if}}" name="author" placeholder="Author" value="{{ book.author.name }}">
          {{#if errors.author }}
             <div class="invalid-feedback">
                 {{ errors.author }}

@@ -5,6 +5,7 @@ const Author = require('../models/author.model');
 
 module.exports.list = (req, res, next) => {
     Book.find()
+        .populate('author')
         .then(books => {
             res.render('books/index', { 
                 books
@@ -18,6 +19,7 @@ module.exports.list = (req, res, next) => {
 module.exports.get = (req, res, next) => {
     const id = req.params.id;
     Book.findById(id)
+        .populate('author')
         .then(book => {
             if (book) {
                 res.render('books/detail', {
@@ -49,26 +51,29 @@ module.exports.doCreate = (req, res, next) => {
         });
     }
 
-    Author.findOne({ name: req.body.author })
+    const authorName = req.body.author;
+    Author.findOne({ name: authorName })
         .then(author => {
             if (author) {
-                console.log(author);
-                const book = new Book({
-                    title: req.body.title,
-                    author: author._id,
-                    description: req.body.description,
-                    rating: req.body.rating
-                });
+                const bookData = Object.assign({}, req.body);
+                book.author = author._id;
+                const book = new Book(bookData);
                 return book.save()
                     .then(() => {
                         res.redirect('/books');
                     });
             } else {
+                req.body.author = {
+                    name: authorName
+                };
                 renderWithErrors({ author: 'Invalid author name' })
             }
         })
         .catch(error => {
             if (error instanceof mongoose.Error.ValidationError) {
+                req.body.author = {
+                    name: authorName
+                };
                 renderWithErrors(error.errors);
             } else {
                 next(error);
@@ -79,6 +84,7 @@ module.exports.doCreate = (req, res, next) => {
 module.exports.update = (req, res, next) => {
     const id = req.params.id;
     Book.findById(id)
+        .populate('author')
         .then(book => {
             if (book) {
                 res.render('books/update', {
@@ -98,13 +104,35 @@ module.exports.update = (req, res, next) => {
 }
 
 module.exports.doUpdate = (req, res, next) => {
+
+    function renderWithErrors(errors) {
+        res.render('books/update', {
+            book: req.body,
+            errors: errors
+        });
+    }
+
     const id = req.params.id;
-    Book.findByIdAndUpdate(id, { $set: req.body }, { runValidators: true, new: true })
-        .then(book => {
-            if (book) {
-                res.redirect(`/books/${id}`);
+    const authorName = req.body.author;
+    Author.findOne({ name: authorName})
+        .then(author => {
+            if (author) {
+                const bookData = Object.assign({}, req.body);
+                bookData.author = author._id;
+                return Book.findByIdAndUpdate(id, { $set: bookData }, { runValidators: true, new: true })
+                    .then(book => {
+                        if (book) {
+                            res.redirect(`/books/${id}`);
+                        } else {
+                            next(createError(404, `Book with id ${id} not found`));
+                        }
+                    })
             } else {
-                next(createError(404, `Book with id ${id} not found`));
+                req.body._id = id;
+                req.body.author = {
+                    name: authorName
+                };
+                renderWithErrors({ author: 'Invalid author name' })
             }
         })
         .catch(error => {
@@ -112,10 +140,10 @@ module.exports.doUpdate = (req, res, next) => {
                 next(createError(404, `Book with id ${id} not found`));
             } else if (error instanceof mongoose.Error.ValidationError) {
                 req.body._id = id;
-                res.render('books/update', {
-                    book: req.body,
-                    errors: error.errors
-                });
+                req.body.author = {
+                    name: authorName
+                };
+                renderWithErrors(error.errors)
             } else {
                 next(error);
             }

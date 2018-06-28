@@ -1,6 +1,6 @@
 <h1 class="d-flex justify-content-between">{{ book.title }} <span class="badge badge-{{get_book_rating_state book }} badge-pill">{{ book.rating }}</span></h1>
 <hr>
-<h6>{{ book.author }}</h6>
+<h6>{{ book.author.name }}</h6>
 <p>{{ book.description }}</p>
 <div class="btn-list">
     <a href="/books" class="btn btn-primary mt-3">Back to list</a>
