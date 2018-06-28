@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const DEFAULT_AUTHOR = 'Anonymous';
 
 const bookSchema = new mongoose.Schema({
     title: {
@@ -8,17 +7,17 @@ const bookSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: true,
-        minlength: 10
+        required: 'Description is required',
+        minlength: [10, 'Description min length 10 characters']
     },
     author: {
-        type: String,
-        default: DEFAULT_AUTHOR
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Author'
     },
     rating: {
         type: Number,
-        min: 1,
-        max: 10
+        min: [1, 'Min rating is 1'],
+        max: [10, 'Max rating is 10']
     }
 }, { timestamps: true });
 

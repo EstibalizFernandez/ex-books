@@ -1,33 +1,6 @@
 <div class="row">
-    <form action="/books/create" method="post" class="col-4">
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fas fa-tag"></i></span>
-            </div>
-            <input type="text" class="form-control" name="title" placeholder="Title" />
-        </div>
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fas fa-user"></i></span>
-            </div>
-            <input type="text" class="form-control" name="author" placeholder="Author">
-        </div>
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text"><i class="fas fa-edit"></i></div>
-            </div>
-            <textarea name="description" class="form-control"></textarea>
-        </div>
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    <i class="fas fa-star"></i>
-                </div>
-            </div>
-            <input type="number" class="form-control" name="rating" min="1" max="10" value="8">
-        </div>
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary btn-block">Add Book</button>
-        </div>
-    </form>
+    <div class="col-12 mb-3">
+        <h1>Add Book</h1>
+    </div>
+    {{> book_form book=book editing=false }}
 </div>

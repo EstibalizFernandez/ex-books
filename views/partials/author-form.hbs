@@ -1,0 +1,44 @@
+<form action="{{#if editing }}/authors/{{author._id}}/update{{else}}/authors/create{{/if}}" method="post" class="col-4">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">
+                <i class="fas fa-user"></i>
+            </span>
+        </div>
+        <input type="text" class="form-control {{#if errors.name }}is-invalid{{/if}}" name="name" placeholder="Name" value="{{ author.name }}"/>
+        {{#if errors.name }}
+            <div class="invalid-feedback">
+                {{ errors.name }}
+            </div>
+        {{/if}}
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">
+                <i class="fas fa-flag"></i>
+            </span>
+        </div>
+        <input type="text" class="form-control {{#if errors.nationality }}is-invalid{{/if}}" name="nationality" placeholder="Nationality" value="{{ author.nationality }}">
+         {{#if errors.nationality }}
+            <div class="invalid-feedback">
+                {{ errors.nationality }}
+            </div>
+        {{/if}}
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+                <i class="fas fa-calendar"></i>
+            </div>
+        </div>
+        <input type="date" class="form-control {{#if errors.birthDate }}is-invalid{{/if}}" name="birthDate" value="{{ author.birthDate }}" placeholder="yyyy/mm/dd">
+        {{#if errors.birthDate }}
+            <div class="invalid-feedback">
+                {{ errors.birthDate }}
+            </div>
+        {{/if}}
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-block">{{#if editing }}Edit{{else}}Add{{/if}} Author</button>
+    </div>
+</form>

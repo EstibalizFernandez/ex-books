@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "DEBUG=ex-books:* nodemon ./bin/www",
+    "dev": "DEBUG=ex-books:* nodemon -e hbs,js ./bin/www",
     "seed": "node ./bin/seeds"
   },
   "dependencies": {
@@ -13,6 +13,7 @@
     "express": "~4.16.0",
     "hbs": "~4.0.1",
     "http-errors": "~1.6.2",
+    "moment": "^2.22.2",
     "mongoose": "^5.1.6",
     "morgan": "~1.9.0",
     "node-sass-middleware": "0.11.0"
